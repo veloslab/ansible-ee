@@ -1,0 +1,77 @@
+# Setting up docker packages like docker-ce and docker-compose
+---
+- name: Install Consul
+  apt:
+    pkg:
+      - consul=1.9.4
+
+- name: Create Consul User
+  user:
+    name: consul
+    home: /etc/consul.d
+    shell: /bin/false
+
+- name: Create Consul Data Directory
+  file:
+    path: /opt/consul
+    state: directory
+    owner: consul
+    group: consul
+    recurse: yes
+
+- name: Adding Consul CA, Key, and Cert to host
+  copy:
+    src: '{{item}}'
+    dest: /etc/consul.d
+    owner: consul
+    group: consul
+    mode: 0640
+  loop:
+    - 'etc/consul.d/{{ca_file}}'
+    - 'etc/consul.d/{{key_file}}'
+    - 'etc/consul.d/{{cert_file}}'
+
+- name: Adding configuration file
+  template:
+    dest: /etc/consul.d/consul.hcl
+    src: etc/consul.d/consul.hcl.j2
+    owner: consul
+    group: consul
+    mode: 0640
+
+- name: Adding configuration server file
+  when: "'hashiserver' in group_names"
+  template:
+    dest: /etc/consul.d/server.hcl
+    src: etc/consul.d/server.hcl.j2
+    owner: consul
+    group: consul
+    mode: 0640
+
+- name: Adding enviroment variables file
+  template:
+    dest: /etc/profile.d/consul.sh
+    src: etc/profile.d/consul.sh.j2
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable Consul
+  systemd:
+    name: consul
+    enabled: yes
+
+- name: Start/Restart Consul
+  systemd:
+    name: consul
+    state: restarted
+    daemon_reload: yes
+
+- name: Checking cluster is running
+  uri:
+    url: http://{{ ansible_default_ipv4.address }}:8500/v1/status/leader
+    method: GET
+    return_content: yes
+  register: _consul_leader
+  until: _consul_leader.json != ""
+  run_once: true

@@ -1,1 +1,3 @@
-# ansible-collection-hashicorp
+# Ansible Collection - veloslab.hashicorp
+
+Documentation for the collection.

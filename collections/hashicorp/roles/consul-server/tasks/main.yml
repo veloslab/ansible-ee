@@ -1,0 +1,17 @@
+# Install and set up consul cluster
+---
+- include_tasks: install.yaml
+
+- name: Generate global management token
+  include_tasks: bootstrap.yml
+  when: consul_global_management_token is undefined and 'hashiserver' in group_names
+  run_once: true
+
+- name: Generate node token
+  include_tasks: node_token.yml
+  when: consul_node_token is undefined and 'hashiserver' in group_names
+  run_once: true
+
+- name: Setting node-token
+  command:
+    cmd: "consul acl set-agent-token -token={{ consul_global_management_token }} -http-addr={{ ansible_default_ipv4.address }}:8500 agent \"{{ consul_node_token}}\""
