@@ -1,0 +1,33 @@
+# Setting up docker packages like docker-ce and docker-compose
+---
+- name: Add Hashicorp GPG apt key
+  apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: Add HashiCorp Linux Repository
+  apt_repository:
+    repo: deb https://apt.releases.hashicorp.com {{ ansible_distribution_release | lower }} main
+    state: present
+
+- name: Install Nomad
+  apt:
+    pkg:
+      - nomad=1.0.4
+
+- name: Create Nomad Data Directory
+  file:
+    path: /opt/nomad
+    state: directory
+    owner: nomad
+    group: nomad
+    recurse: yes
+
+- name: Adding enviroment variables file
+  template:
+    dest: /etc/profile.d/consul.sh
+    src: etc/profile.d/consul.sh.j2
+    owner: root
+    group: root
+    mode: 0644
+

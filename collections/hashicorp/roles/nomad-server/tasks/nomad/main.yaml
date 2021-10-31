@@ -1,0 +1,45 @@
+# Installing Nomad
+---
+- name: Install Nomad
+  apt:
+    pkg:
+      - nomad=1.0.4
+
+- name: Create Nomad Data Directory
+  file:
+    path: /opt/nomad
+    state: directory
+    owner: '{{ ansible_user }}'
+    group: '{{ ansible_user }}'
+    mode: 0700
+
+- name: Create Nomad Config Directory
+  file:
+    path: /etc/nomad.d
+    state: directory
+    owner: '{{ ansible_user }}'
+    group: '{{ ansible_user }}'
+    mode: 0700
+
+- name: Add Nomad service file
+  template:
+    dest: /etc/systemd/system/nomad.service
+    src: etc/systemd/system/nomad.service.j2
+
+- name: Add nomad.hcl file
+  template:
+    dest: /etc/nomad.d/nomad.hcl
+    src: etc/nomad.d/nomad.hcl.j2
+
+- name: Add server.hcl file on server nodes
+  when: "'hashiserver' in group_names"
+  copy:
+    dest: /etc/nomad.d/server.hcl
+    src: etc/nomad.d/server.hcl
+
+- name: Add client.hcl on client nodes
+  when: "'hashiclient' in group_names"
+  copy:
+    dest: /etc/nomad.d/client.hcl
+    src: etc/nomad.d/client.hcl
+

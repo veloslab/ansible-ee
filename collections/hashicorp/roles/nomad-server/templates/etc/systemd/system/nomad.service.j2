@@ -1,0 +1,25 @@
+[Unit]
+Description=Nomad
+Documentation=https://www.nomadproject.io/docs
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/nomad agent -config /etc/nomad.d
+KillMode=process
+KillSignal=SIGINT
+LimitNOFILE=infinity
+LimitNPROC=infinity
+Restart=on-failure
+RestartSec=2
+StartLimitBurst=3
+StartLimitIntervalSec=10
+TasksMax=infinity
+Environment="CONSUL_HTTP_SSL=true"
+Environment="CONSUL_CACERT=/etc/consul.d/{{ ca_file }}"
+Environment="CONSUL_CLIENT_CERT=/etc/consul.d/{{ cert_file }}"
+Environment="CONSUL_CLIENT_KEY=/etc/consul.d/{{ key_file }}"
+
+[Install]
+WantedBy=multi-user.target

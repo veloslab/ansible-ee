@@ -1,0 +1,7 @@
+datacenter = "veloslab"
+data_dir = "/opt/nomad"
+
+consul {
+  token: = "{% if 'hashiserver' in group_names %}{{ consul_nomad_server_token }}{% else %}{{ consul_nomad_client_token }}{% endif %} "
+}
+

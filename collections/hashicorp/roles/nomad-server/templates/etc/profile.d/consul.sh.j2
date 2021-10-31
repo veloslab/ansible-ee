@@ -1,0 +1,4 @@
+export CONSUL_CACERT=/etc/consul.d/{{ ca_file }}
+export CONSUL_CLIENT_CERT=/etc/consul.d/{{ cert_file }}
+export CONSUL_CLIENT_KEY=/etc/consul.d/{{ key_file }}
+export CONSUL_HTTP_ADDR={{ ansible_default_ipv4.address }}:8500
