@@ -1,0 +1,12 @@
+[program:alerta-heartbeat]
+command=/etc/alerta/scripts/send_heartbeat.sh
+process_name=%(program_name)s
+user=root
+autostart=False
+startsecs=0
+startretries=0
+exitcodes=0,200
+redirect_stderr=true
+stdout_logfile=/var/log/supervisor/alerta-heartbeat.log
+stdout_logfile_maxbytes=10MB
+environment=ALERTA_HEARTBEAT_API_KEY='{{ alerta_heartbeat_api_key }}'

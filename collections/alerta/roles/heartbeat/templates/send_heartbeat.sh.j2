@@ -1,0 +1,13 @@
+#!/bin/bash
+curl -XPOST {{ alerta_heartbeat_domain }}/heartbeat -L \
+-H "Authorization: Key $ALERTA_HEARTBEAT_API_KEY" \
+-H 'Content-type: application/json' \
+-d '{
+      "origin": "{{ alerta_heartbeat_origin }}",
+      "timeout": {{ alerta_heartbeat_timeout }},
+      "attributes": {
+        "environment": "{{ alerta_heartbeat_environment }}",
+        "service": "{{ alerta_heartbeat_service }}",
+        "severity": "major"
+      }
+    }'

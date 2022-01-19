@@ -1,2 +1,3 @@
-# ansible-collection-alerta
-Collection for veloslab.alerta 
+# Ansible Collection - veloslab.alerta
+
+Documentation for the collection.

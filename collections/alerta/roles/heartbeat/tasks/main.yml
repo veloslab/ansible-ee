@@ -1,0 +1,42 @@
+---
+# tasks file for heartbeat
+
+- name: Install Supervisor
+  ansible.builtin.apt:
+    pkg:
+      - supervisor
+
+- name: Create Supervisor Config File
+  ansible.builtin.template:
+    dest: /etc/supervisor/conf.d/alerta-heartbeat.conf
+    src: alerta-heartbeat.conf.j2
+    owner: root
+    group: root
+    mode: 0640
+
+- name: Create /etc/alerta/scripts directory if it does not exist
+  ansible.builtin.file:
+    path: /etc/alerta/scripts
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create Alerta Heartbeat Script
+  ansible.builtin.template:
+    dest: /etc/alerta/scripts/send_heartbeat.sh
+    src: send_heartbeat.sh.j2
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Reread and add alert-heartbeat to supervisor
+  community.general.supervisorctl:
+    name: alerta-heartbeat
+    state: present
+
+- name: Create cron entry "supervisorctl start alerta-heartbeat"
+  ansible.builtin.cron:
+    name: "Supervisor Alerta-Heartbeat"
+    job: "supervisorctl start alerta-heartbeat"
+    user: root
