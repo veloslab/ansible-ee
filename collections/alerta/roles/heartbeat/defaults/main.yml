@@ -4,3 +4,4 @@
 alerta_heartbeat_timeout: 120
 alerta_heartbeat_environment: production
 alerta_heartbeat_service: system
+alerta_heartbeat_origin: "{{ ansible_hostname }}"
