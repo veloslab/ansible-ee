@@ -1,3 +1,8 @@
 # Ansible Collection - veloslab.alerta
 
-Documentation for the collection.
+Collection of Alerta roles
+
+Heartbeat
+--------------
+
+Using supervisor, deploy a daemon that sends a heartbeat every 30 seconds to a alerta server
