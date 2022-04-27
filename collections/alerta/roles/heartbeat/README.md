@@ -17,6 +17,7 @@ Here are defaults variables for alert set up  (see `defaults/main.yml`):
     alerta_heartbeat_origin: "{{ ansible_hostname }}"
 
 The following variables must be defined
+    
     alerta_heartbeat_api_key - API Key
     alerta_heartbeat_domain - API Endpoint Ex. https://domain.com/api
 
