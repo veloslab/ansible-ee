@@ -14,25 +14,25 @@
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^#?UsePAM\s'
-    replace: 'UsePAM yes'
+    line: 'UsePAM yes'
 
 - name: Setting AuthorizedKeysCommand in /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^#?AuthorizedKeysCommand\s'
-    replace: 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys'
+    line: 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys'
 
 - name: Setting AuthorizedKeysCommandUser in /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^#?AuthorizedKeysCommandUser\s'
-    replace: 'AuthorizedKeysCommandUser root'
+    line: 'AuthorizedKeysCommandUser root'
 
 - name: Setting up /etc/pam.d/sshd to allow home directories to be created
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^session\s+required\s+pam_mkhomedir.so\s+skel=/etc/skel/'
-    replace: 'session    required     pam_mkhomedir.so skel=/etc/skel/'
+    line: 'session    required     pam_mkhomedir.so skel=/etc/skel/'
 
 - name: Create SSSD Config File
   ansible.builtin.template:
