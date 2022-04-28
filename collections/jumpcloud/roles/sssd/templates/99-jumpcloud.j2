@@ -1,0 +1,9 @@
+{% for user_group, no_pass in jumpcloud_sudoers.items() %}
+{% if no_pass %}
+{{ user_group }} ALL=(ALL:ALL)
+
+{% else %}
+{{ user_group }} ALL=(ALL:ALL) NOPASSWD:ALL
+
+{% endif %}
+{% endfor %}
