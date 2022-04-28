@@ -50,3 +50,14 @@
     group: root
     mode: 0600
   when: jumpcloud_sudoers.keys()|length > 0
+
+- name: Enable SSSD Service
+  ansible.builtin.systemd:
+    name: sssd
+    state: started
+    enabled: true
+
+- name: Reload SSHD Config
+  ansible.builtin.systemd:
+    name: sshd
+    state: reloaded
