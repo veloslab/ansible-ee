@@ -12,9 +12,13 @@ Role Variables
 --------------
 Variables required for role:
 
-    jumpcloud_sudoers - Default {}, where key is user/group and value is true/false is you want sudo to require password. By default, no group or user is added to sudoers
+    jumpcloud_sudoers - Default {}, where key is user/group and value is true/false. Value determines if password is required for sudo. 
+    By default, no group or user is added to sudoers
+    
     jumpcloud_organization - JumpCloud Organization ID, can be found in ldap settings
+    
     jumpcloud_bind_user - Bind User
+    
     jumpcloud_bind_password - Password for Bind User
 
 Dependencies
