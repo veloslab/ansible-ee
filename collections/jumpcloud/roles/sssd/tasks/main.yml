@@ -30,7 +30,7 @@
 
 - name: Setting up /etc/pam.d/sshd to allow home directories to be created
   ansible.builtin.lineinfile:
-    path: /etc/ssh/sshd_config
+    path: /etc/pam.d/sshd
     regexp: '^session\s+required\s+pam_mkhomedir.so\s+skel=/etc/skel/'
     line: 'session    required     pam_mkhomedir.so skel=/etc/skel/'
 
