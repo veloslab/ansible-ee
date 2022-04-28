@@ -46,7 +46,7 @@
   ansible.builtin.template:
     src: 99-jumpcloud.j2
     dest: /etc/sudoers.d/99-jumpcloud
-    when: jumpcloud_sudoers.keys()|length > 0
     owner: root
     group: root
     mode: 0600
+  when: jumpcloud_sudoers.keys()|length > 0
