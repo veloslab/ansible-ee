@@ -1,5 +1,5 @@
-{% for user_group, no_pass in jumpcloud_sudoers.items() %}
-{% if no_pass %}
+{% for user_group, pwd_required in jumpcloud_sudoers.items() %}
+{% if pwd_required %}
 {{ user_group }} ALL=(ALL:ALL)
 
 {% else %}
