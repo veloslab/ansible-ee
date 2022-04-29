@@ -1,6 +1,6 @@
 {% for user_group, pwd_required in jumpcloud_sudoers.items() %}
 {% if pwd_required %}
-{{ user_group }} ALL=(ALL:ALL)
+{{ user_group }} ALL=(ALL:ALL) ALL
 
 {% else %}
 {{ user_group }} ALL=(ALL:ALL) NOPASSWD:ALL
