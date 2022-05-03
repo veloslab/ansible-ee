@@ -29,6 +29,8 @@ ui_config {
 }
 
 client_addr = "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
+bootstrap_expect = {{ consul_bootstrap_expect }}
 {% else %}
 auto_encrypt {
   tls = true
@@ -42,3 +44,5 @@ tls {
   }
 }
 {% endif %}
+
+retry_join = {{ consul_retry_join | tojson }}

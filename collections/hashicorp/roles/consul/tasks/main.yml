@@ -40,3 +40,22 @@
     owner: consul
     group: consul
     mode: 0640
+
+- name: Adding enviroment variables file
+  ansible.builtin.template:
+    dest: /etc/profile.d/consul.sh
+    src: consul.sh.j2
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable Consul
+  ansible.builtin.systemd:
+    name: consul
+    enabled: true
+
+- name: Start/Restart Consul
+  ansible.builtin.systemd:
+    name: consul
+    state: restarted
+    daemon_reload: true
