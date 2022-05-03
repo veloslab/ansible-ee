@@ -1,0 +1,42 @@
+# Install and set up consul cluster
+---
+- include_role:
+    name: veloslab.hashicorp.install
+
+- name: Install Consul
+  ansible.builtin.apt:
+    name: 'consul={{ consul_version }}'
+
+- name: Add CA certificate
+  ansible.builtin.copy:
+    content: '{{ consul_ca_cert }}'
+    dest: /etc/consul.d/consul-agent-ca.pem
+    owner: consul
+    group: consul
+    mode: 0600
+
+- name: Add server certificate
+  ansible.builtin.copy:
+    content: '{{ consul_server_cert }}'
+    dest: '/etc/consul.d/consul-server-{{ ansible_hostname }}.pem'
+    owner: consul
+    group: consul
+    mode: 0600
+  when: consul_server
+
+- name: Add server private key
+  ansible.builtin.copy:
+    content: '{{ consul_server_key }}'
+    dest: '/etc/consul.d/consul-server-key-{{ ansible_hostname }}.pem'
+    owner: consul
+    group: consul
+    mode: 0600
+  when: consul_server
+
+- name: Adding configuration file
+  ansible.builtin.template:
+    dest: /etc/consul.d/consul.hcl
+    src: consul.hcl.j2
+    owner: consul
+    group: consul
+    mode: 0640

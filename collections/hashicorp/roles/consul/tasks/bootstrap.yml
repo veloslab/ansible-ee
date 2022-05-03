@@ -1,0 +1,21 @@
+# Setting up docker packages like docker-ce and docker-compose
+
+- name: Bootstrap Consul
+  uri:
+    url: http://{{ ansible_default_ipv4.address }}:8500/v1/acl/bootstrap
+    method: PUT
+    return_content: yes
+  register: _bootstrap_output
+
+- name: Extract global management token from response
+  set_fact:
+    consul_global_management_token: '{{ _bootstrap_output.json.SecretID }}'
+
+- name: Saved token to vars/consul/global-management-token.yaml (local)
+  template:
+    src: local/vars/consul/global-management-token.yaml.j2
+    dest: '{{ role_path }}/vars/consul/global-management-token.yaml'
+    mode: 0640
+  delegate_to: localhost
+  become: no
+  become_user: "{{ lookup('env', 'USER') }}"
