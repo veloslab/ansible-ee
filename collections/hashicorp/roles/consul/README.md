@@ -11,6 +11,8 @@ None
 Role Variables
 --------------
 
+`consul_version` - String, version of consul that should be installed. Default is '*'
+
 `consul_server` - Boolean, determines if consul agent should be set up as server or client
 
 `consul_datacenter` - String, Name of datacenter
