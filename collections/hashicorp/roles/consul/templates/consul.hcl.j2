@@ -14,9 +14,9 @@ tls {
   defaults {
     verify_incoming = true
     verify_outgoing = true
-    ca_file = "/etc/consul.d/consul-agent-ca.pem"
-    cert_file = "/etc/consul.d/consul-server-{{ ansible_hostname }}.pem"
-    key_file = "/etc/consul.d/consul-server-key-{{ ansible_hostname }}.pem"
+    ca_file = "/etc/consul.d/certs/consul-agent-ca.pem"
+    cert_file = "/etc/consul.d/certs/consul-server-{{ ansible_hostname }}.pem"
+    key_file = "/etc/consul.d/certs/consul-server-key-{{ ansible_hostname }}.pem"
   }
 
   internal_rpc {
@@ -40,7 +40,7 @@ tls {
   defaults {
     verify_incoming = false
     verify_outgoing = true
-    ca_file = "/etc/consul.d/consul-agent-ca.pem"
+    ca_file = "/etc/consul.d/certs/consul-agent-ca.pem"
   }
 }
 {% endif %}

@@ -7,10 +7,18 @@
   ansible.builtin.apt:
     name: 'consul={{ consul_version }}'
 
+- name: Create /etc/consul.d/certs directory
+  ansible.builtin.file:
+    path: /etc/consul.d/certs
+    state: directory
+    owner: consul
+    group: consul
+    mode: 0755
+
 - name: Add CA certificate
   ansible.builtin.copy:
     content: '{{ consul_ca_cert }}'
-    dest: /etc/consul.d/consul-agent-ca.pem
+    dest: /etc/consul.d/certs/consul-agent-ca.pem
     owner: consul
     group: consul
     mode: 0600
@@ -18,7 +26,7 @@
 - name: Add server certificate
   ansible.builtin.copy:
     content: '{{ consul_server_cert }}'
-    dest: '/etc/consul.d/consul-server-{{ ansible_hostname }}.pem'
+    dest: '/etc/consul.d/certs/consul-server-{{ ansible_hostname }}.pem'
     owner: consul
     group: consul
     mode: 0600
@@ -27,7 +35,7 @@
 - name: Add server private key
   ansible.builtin.copy:
     content: '{{ consul_server_key }}'
-    dest: '/etc/consul.d/consul-server-key-{{ ansible_hostname }}.pem'
+    dest: '/etc/consul.d/certs/consul-server-key-{{ ansible_hostname }}.pem'
     owner: consul
     group: consul
     mode: 0600
