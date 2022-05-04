@@ -1,38 +1,68 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Deploy Consul Server or Client
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+`consul_server` - Boolean, determines if consul agent should be set up as server or client
+
+`consul_datacenter` - String, Name of datacenter
+
+`consul_encrypt` - String, Encryption key for gossip
+
+`consul_retry_join` - List of consul servers
+
+`consul_ca_cert` - String, content of ca certificate to use for tls
+
+`consul_bootstrap_expect` - Int, number of consul servers to expect. Only required when consul_server is true
+
+Following variables should be set for hosts that will be consul servers, these should be host variables. Only required on consul server hosts
+
+`consul_server_cert` - String, content of server certificate
+
+`consul_server_key` - String, content of server key
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Exmple of deploying 
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+  ---
+  - hosts: all
+    become: true
+    vars:
+      consul_datacenter: 'dc1'
+      consul_encrypt: "{{ lookup('hashi_vault', 'secret=secret/data/consul/encryption_key')['key']}}"
+      consul_server: true
+      consul_retry_join: ["consul-1.domain", "consul-2.domain", "consul-3.domain"]
+      consul_bootstrap_expect: 3
+  
+    tasks:
+      - name: Deploy Consul Server
+        include_role:
+          name: veloslab.hashicorp.consul
+        vars:
+          consul_server_tls: "{{ lookup('hashi_vault', 'secret=secret/data/consul/{{ ansible_hostname }}')}}"
+          consul_ca_cert: "{{ consul_server_tls['ca'] }}"
+          consul_server_cert: "{{ consul_server_tls['certificate'] }}"
+          consul_server_key: "{{ consul_server_tls['private_key'] }}"                                                                        
+```
+
 
 License
 -------
 
 BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
