@@ -1,7 +1,7 @@
-Base Python
+Alerta Heartbeat
 =========
 
-Ansible role that installs python
+Ansible role that install base python
 
 Requirements
 ------------
@@ -9,10 +9,9 @@ Only tested on Ubuntu/Debian machines
 
 Role Variables
 --------------
+You need to set the following variable
 
-The following variables must be defined
-
-`python_version` - Version of Python that needs to be installed
+`python_version` - Python version you want installed
 
 Dependencies
 ------------
@@ -25,7 +24,7 @@ Playbook:
 ```yaml
 - hosts: all
   vars:
-    python_version: '3.6'
+    python_version: 3.10
 
   roles:
     - veloslab.base.python
