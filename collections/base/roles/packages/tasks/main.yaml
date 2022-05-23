@@ -2,19 +2,7 @@
 ---
 - name: Update apt-get repo and cache
   apt:
-    update_cache: yes
-    force_apt_get: yes
-
-- name: Upgrade all apt packages
-  apt:
-    upgrade: dist
-    force_apt_get: yes
-
-- name: Install aptitude using apt (preffered for ansible)
-  apt:
-    name: aptitude
-    state: latest
-    force_apt_get: yes
+    update_cache: true
 
 - name: install base packages
   apt:
@@ -22,50 +10,12 @@
     pkg:
       - software-properties-common
       - ntpdate
-      - acl
-      - gnupg
-      - unzip
-      - git
       - unzip
       - zip
+      - git
       - curl
       - vim
       - tmux
-      - nfs-common
-      - libxml2-utils
-      - python-apt
-
-- name: Add Deadsnake Repository
-  apt_repository:
-    repo: 'ppa:deadsnakes/ppa'
-    update_cache: yes
-
-- name: Install Python 3.9
-  apt:
-    state: present
-    pkg:
-      - python3.9
-
-- name: Check if pip3.9 is installed
-  command: "pip3.9 --version"
-  ignore_errors: yes
-  register: pip_version_output
-
-- name: Download get-pip.py
-  get_url:
-    url: https://bootstrap.pypa.io/get-pip.py
-    dest: /tmp/get-pip.py
-  when: pip_version_output is failed
-
-- name: Install pip for python 3.9
-  command: python3.9 /tmp/get-pip.py
-  when: pip_version_output is failed
-
-- name: Instal venv for python 3.9
-  pip:
-    executable: pip3.9
-    name:
-      - virtualenv
 
 - name: Apply global vim settings
   copy:
