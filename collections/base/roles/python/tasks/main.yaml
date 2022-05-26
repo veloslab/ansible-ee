@@ -15,22 +15,11 @@
     repo: ppa:deadsnakes/ppa
     state: present
 
-- name: Install python
+- name: Install Python
   ansible.builtin.apt:
-    name: 'python{{ python_version }}'
-    state: latest
-
-- name: Install python distutils
-  ansible.builtin.apt:
-    name: 'python{{ python_version }}-distutils'
-    state: latest
-
-- name: Install python venv
-  ansible.builtin.apt:
-    name: 'python{{ python_version }}-venv'
-    state: latest
-
-- name: Install python dev
-  ansible.builtin.apt:
-    name: 'python{{ python_version }}-dev'
+    pkg:
+      - 'python{{ python_version }}'
+      - 'python{{ python_version }}-distutils'
+      - 'python{{ python_version }}-venv'
+      - 'python{{ python_version }}-dev'
     state: latest
