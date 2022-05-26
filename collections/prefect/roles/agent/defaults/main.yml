@@ -1,0 +1,4 @@
+---
+# defaults file for agent
+prefect_user: root
+prefect_env: {}

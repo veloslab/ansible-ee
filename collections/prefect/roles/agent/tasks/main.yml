@@ -1,0 +1,33 @@
+---
+# tasks file for agent
+
+- name: Install Supervisor and ACL
+  ansible.builtin.apt:
+    pkg:
+      - supervisor
+      - acl
+
+- name: Log into Prefect Cloud
+  ansible.builtin.command:
+    cmd: "{{ prefect_venv }}/bin/prefect cloud login --key {{ prefect_api_key }} --workspace {{prefect_workspace }}"
+  become: true
+  become_user: "{{ prefect_user }}"
+  register: prefect_login_output
+
+- name: Create Supervisor Config File for Prefect Agent
+  ansible.builtin.template:
+    dest: '/etc/supervisor/conf.d/prefect-{{prefect_work_queue_name}}.conf'
+    src: prefect.conf.j2
+    owner: root
+    group: vls-admins
+    mode: 0640
+
+- name: Loading Prefect Agent Config
+  community.general.supervisorctl:
+    name: "prefect-{{prefect_work_queue_name}}"
+    state: present
+
+- name: Starting Prefect Agent
+  community.general.supervisorctl:
+    name: "prefect-{{prefect_work_queue_name}}"
+    state: restarted
