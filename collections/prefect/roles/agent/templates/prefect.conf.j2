@@ -1,9 +1,9 @@
 {% set temp_env = [] %}
-[program:prefect-{{ prefect_work_queue_name }}]
-command={{ prefect_venv }}/bin/prefect agent start {{ prefect_work_queue_id }}
+[program:prefect-{{ prefect_work_pool }}]
+command={{ prefect_venv }}/bin/prefect agent start --pool {{ prefect_work_pool }}
 process_name=%(program_name)s
 user={{ prefect_user }}
-stdout_logfile=/var/log/supervisor/prefect-{{ prefect_work_queue_name }}.log
+stdout_logfile=/var/log/supervisor/prefect-{{prefect_work_pool}}.log
 stdout_logfile_maxbytes=10MB
 redirect_stderr=true
 {%- if prefect_env|length > 0 -%}
@@ -12,3 +12,6 @@ redirect_stderr=true
 {%endfor%}
 environment={{temp_env | join (',') }}
 {% endif %}
+autostart=true
+autorestart=true
+startretries=10

@@ -16,7 +16,7 @@
 
 - name: Create Supervisor Config File for Prefect Agent
   ansible.builtin.template:
-    dest: '/etc/supervisor/conf.d/prefect-{{prefect_work_queue_name}}.conf'
+    dest: '/etc/supervisor/conf.d/prefect-{{prefect_work_pool}}.conf'
     src: prefect.conf.j2
     owner: root
     group: vls-admins
@@ -24,10 +24,10 @@
 
 - name: Loading Prefect Agent Config
   community.general.supervisorctl:
-    name: "prefect-{{prefect_work_queue_name}}"
+    name: "prefect-{{prefect_work_pool}}"
     state: present
 
 - name: Starting Prefect Agent
   community.general.supervisorctl:
-    name: "prefect-{{prefect_work_queue_name}}"
+    name: "prefect-{{prefect_work_pool}}"
     state: restarted
