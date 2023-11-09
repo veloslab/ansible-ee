@@ -9,7 +9,8 @@
 
 - name: Log into Prefect Cloud
   ansible.builtin.command:
-    cmd: "{{ prefect_venv }}/bin/prefect cloud login --key {{ prefect_api_key }} --workspace {{prefect_workspace }}"
+    cmd: "{{ prefect_venv }}/bin/prefect cloud login --key {{ prefect_api_key }} --workspace {{ prefect_workspace }}"
+    creates: ~/.prefect
   become: true
   become_user: "{{ prefect_user }}"
   register: prefect_login_output
