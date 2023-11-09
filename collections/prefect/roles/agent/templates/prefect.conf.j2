@@ -1,6 +1,6 @@
 {% set temp_env = [] %}
 [program:prefect-{{ prefect_work_pool }}]
-command={{ prefect_venv }}/bin/prefect agent start --pool {{ prefect_work_pool }}
+command={{ prefect_venv }}/bin/prefect worker start -p {{ prefect_work_pool }}
 process_name=%(program_name)s
 user={{ prefect_user }}
 stdout_logfile=/var/log/supervisor/prefect-{{prefect_work_pool}}.log
