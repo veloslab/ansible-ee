@@ -1,0 +1,67 @@
+---
+# tasks file for sssd
+
+- name: Update apt-get rep and install libpam-sss, libnss-sss, sssd-tools
+  ansible.builtin.apt:
+    update_cache: true
+    force_apt_get: true
+    pkg:
+      - libpam-sss
+      - libnss-sss
+      - sssd-tools
+
+- name: Setting UsePAM in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?UsePAM\s'
+    line: 'UsePAM yes'
+
+- name: Setting AuthorizedKeysCommand in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?AuthorizedKeysCommand\s'
+    line: 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys'
+
+- name: Setting AuthorizedKeysCommandUser in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?AuthorizedKeysCommandUser\s'
+    line: 'AuthorizedKeysCommandUser root'
+
+- name: Setting up /etc/pam.d/sshd to allow home directories to be created
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/sshd
+    regexp: '^session\s+required\s+pam_mkhomedir.so\s+skel=/etc/skel/'
+    line: 'session    required     pam_mkhomedir.so skel=/etc/skel/'
+
+- name: Create SSSD Config File
+  ansible.builtin.template:
+    src: sssd.conf.j2
+    dest: /etc/sssd/sssd.conf
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Create JumpCloud Sudoers
+  ansible.builtin.template:
+    src: 99-jumpcloud.j2
+    dest: /etc/sudoers.d/99-jumpcloud
+    owner: root
+    group: root
+    mode: 0600
+  when: jumpcloud_sudoers.keys()|length > 0
+
+- name: Enable SSSD Service
+  ansible.builtin.systemd:
+    name: sssd
+    enabled: true
+
+- name: Start SSSD Service
+  ansible.builtin.systemd:
+    name: sssd
+    state: started
+
+- name: Reload SSHD Config
+  ansible.builtin.systemd:
+    name: sshd
+    state: reloaded
