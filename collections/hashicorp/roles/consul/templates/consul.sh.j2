@@ -1,0 +1,6 @@
+export CONSUL_CACERT=/etc/consul.d/certs/consul-agent-ca.pem
+{% if consul_server %}
+export CONSUL_CLIENT_CERT=/etc/consul.d/certs/consul-server-{{ ansible_hostname }}.pem
+export CONSUL_CLIENT_KEY=/etc/consul.d/certs/consul-server-key-{{ ansible_hostname }}.pem
+{% endif %}
+export CONSUL_HTTP_ADDR={{ ansible_default_ipv4.address }}:8500
