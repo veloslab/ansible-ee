@@ -1,0 +1,49 @@
+# Create Node Export Service
+---
+- name: Create node_exporter user
+  user:
+    name: node_exporter
+    uid: 1500
+    shell: /bin/false
+    create_home: no
+    system: yes
+
+- name: Check if node exporter binary is installed
+  stat:
+    path: /usr/local/bin/node_exporter
+  register: ne_binary
+
+- name: Download and extract node exporter binary
+  unarchive:
+    src: https://github.com/prometheus/node_exporter/releases/download/v{{ version }}/node_exporter-{{ version }}.linux-amd64.tar.gz
+    dest: /tmp/
+    remote_src: yes
+  when: not ne_binary.stat.exists
+
+- name: Move node exporter binary to /usr/local/bin/
+  copy:
+    src: /tmp/node_exporter-{{ version }}.linux-amd64/node_exporter
+    dest: /usr/local/bin/
+    owner: node_exporter
+    group: node_exporter
+    mode: '0770'
+    remote_src: yes
+  when: not ne_binary.stat.exists
+
+- name: Create node_exporter service file
+  copy:
+    src: etc/systemd/system/node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Reload systemd configs
+  systemd:
+    daemon_reload: yes
+
+- name: Enable Node Exporter
+  systemd:
+    name: node_exporter
+    state: restarted
+    enabled: yes

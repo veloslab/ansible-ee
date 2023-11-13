@@ -1,0 +1,25 @@
+# Installing Python
+---
+- name: Update apt
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install software-properties-common
+  ansible.builtin.apt:
+    state: present
+    pkg:
+      - software-properties-common
+
+- name: Add deadsnakes/ppa Repository
+  apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: present
+
+- name: Install Python
+  ansible.builtin.apt:
+    pkg:
+      - 'python{{ python_version }}'
+      - 'python{{ python_version }}-distutils'
+      - 'python{{ python_version }}-venv'
+      - 'python{{ python_version }}-dev'
+    state: latest

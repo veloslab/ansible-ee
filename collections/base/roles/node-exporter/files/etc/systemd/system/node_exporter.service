@@ -1,0 +1,12 @@
+[Unit]
+Description=Node Exporter
+After=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter --collector.disable-defaults --collector.filesystem --collector.filesystem.ignored-fs-types='devfs|tmpfs|fdescfs|nullfs|nfs|nsf4|squashfs|vfat|rpc_pipefs|nsfs' --collector.meminfo --collector.cpu
+
+[Install]
+WantedBy=multi-user.target
