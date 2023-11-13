@@ -1,0 +1,17 @@
+{% set temp_env = [] %}
+[program:prefect-{{ prefect_work_pool }}]
+command={{ prefect_venv }}/bin/prefect worker start -p {{ prefect_work_pool }}
+process_name=%(program_name)s
+user={{ prefect_user }}
+stdout_logfile=/var/log/supervisor/prefect-{{prefect_work_pool}}.log
+stdout_logfile_maxbytes=10MB
+redirect_stderr=true
+{%- if prefect_env|length > 0 -%}
+{% for key, value in prefect_env.items() %}
+{{ temp_env.append(key ~ '="' ~ value ~ '"' ) }}
+{%endfor%}
+environment={{temp_env | join (',') }}
+{% endif %}
+autostart=true
+autorestart=true
+startretries=10
