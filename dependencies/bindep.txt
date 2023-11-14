@@ -1,6 +1,6 @@
 openssh-clients
 sshpass
 
-git-core
+git
 findutils
 which
