@@ -21,6 +21,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3.5.3
         
+      - name: Install Git
+        run: apt install git        
+      
       - name: Install python requirements (ansible-builder)
         run: pip install ansible-builder==3.0.0
 
