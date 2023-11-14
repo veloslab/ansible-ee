@@ -6,4 +6,4 @@ collections:
   - name: community.hashi_vault
     version: 5.0.1
     source: https://galaxy.ansible.com
-  - name: git+https://github.com/veloslab/ansible-ee.git#/collections
+  - name: git+https://github.com/veloslab/ansible-ee.git#/collections/
