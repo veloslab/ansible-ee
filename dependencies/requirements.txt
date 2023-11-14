@@ -1,1 +1,1 @@
-example-pypi-package
+hvac==2.0.0
