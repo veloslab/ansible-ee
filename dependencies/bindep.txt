@@ -1,6 +1,4 @@
 openssh-clients
 sshpass
-
-git
 findutils
 which
