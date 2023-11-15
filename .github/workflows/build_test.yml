@@ -14,20 +14,17 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     runs-on: ubuntu-latest
-    environment: deploy
+    environment: test
     steps:
 
       # In this job, all steps begin with a name
       - name: Checkout repository
         uses: actions/checkout@v3.5.3
-        
-      - name: Install Git
-        run: sudo apt-get install git      
-      
+
       - name: Install python requirements (ansible-builder)
         run: pip install ansible-builder==3.0.0
 
       - name: Build image
         id: build-image
         run: |
-          ansible-builder build --container-runtime=docker --verbosity 3 
+          ansible-builder build --container-runtime=docker --verbosity 3
