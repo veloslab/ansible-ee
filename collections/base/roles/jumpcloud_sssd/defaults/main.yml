@@ -1,0 +1,5 @@
+---
+# defaults file for sssd
+
+jumpcloud_sudoers:
+  - vls-admins

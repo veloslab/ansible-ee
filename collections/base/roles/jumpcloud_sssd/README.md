@@ -12,8 +12,7 @@ Role Variables
 --------------
 Variables required for role:
 
-    jumpcloud_sudoers - Default {}, where key is user/group and value is true/false. Value determines if password is required for sudo. 
-    By default, no group or user is added to sudoers
+    jumpcloud_sudoers - list of groups that should be granted sudo
     
     jumpcloud_organization - JumpCloud Organization ID, can be found in ldap settings
     
@@ -33,17 +32,17 @@ Example below shows adding a group (group name must be prepended with %) and use
 Password is required for mygroup to sudo 
 ```yaml
 - hosts: all
-  vars:
-    jumpcloud_sudoers: {'%mygroup': true, 'myuser': false}
-    jumpcloud_bind_user: 'buser'
-    jumpcloud_bind_password: 'password'
-    jumpcloud_organization: '1123a1b3342'
 
   roles:
-    - veloslab.jumpcloud.sssd
+    - role: veloslab.base.jumpcloud_sssd
+      jumpcloud_sudoers:
+        - vls-admins
+      jumpcloud_bind_user: 'user'
+      jumpcloud_bind_password: 'password'
+      jumpcloud_organization: '1123a1b3342'
 ```
 
-Below, no group or user will be added to sudoers, using default value
+Below, no group or user will be added to sudoers (using variables)
 ```yaml
 - hosts: all
   vars:
@@ -52,7 +51,7 @@ Below, no group or user will be added to sudoers, using default value
     jumpcloud_organization: '1123a1b3342'
 
   roles:
-    - veloslab.jumpcloud.sssd
+    - veloslab.base.jumpcloud_sssd
 ```
 
 License
