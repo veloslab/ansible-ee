@@ -1,0 +1,30 @@
+---
+argument_specs:
+  main:
+    short_description: Main entry point for the Jumpcloud SSSD Role
+    description:
+      - This is the main entrypoint for the jumpcloud_sssd role.
+      - Role will install SSSD with Jumpcloud LDAP as domain
+    author:
+      - Veloslab
+    options:
+      jumpcloud_organization:
+        type: "str"
+        required: true
+        description: "Jumpcloud Organization"
+
+      jumpcloud_bind_user:
+        type: "str"
+        required: true
+        description: "Jumpcloud Bind User"
+
+      jumpcloud_bind_password:
+        type: "str"
+        required: true
+        description: "Jumpcloud Bind Password"
+
+      jumpcloud_sudoers:
+        type: "list"
+        elements: "str"
+        required: false
+        description: "List of groups that will be granted sudo (password will required for sudo)"

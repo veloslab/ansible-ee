@@ -49,7 +49,7 @@
     owner: root
     group: root
     mode: 0600
-  when: jumpcloud_sudoers.keys()|length > 0
+  when: jumpcloud_sudoers
 
 - name: Enable SSSD Service
   ansible.builtin.systemd:
