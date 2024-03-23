@@ -32,3 +32,4 @@
   community.general.supervisorctl:
     name: "prefect-{{prefect_work_pool}}"
     state: restarted
+

@@ -56,12 +56,7 @@
     name: sssd
     enabled: true
 
-- name: Start SSSD Service
+- name: Restart SSSD Service
   ansible.builtin.systemd:
     name: sssd
-    state: started
-
-- name: Reload SSHD Config
-  ansible.builtin.systemd:
-    name: sshd
-    state: reloaded
+    state: restarted
